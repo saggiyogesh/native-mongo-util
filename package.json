@@ -1,0 +1,37 @@
+{
+  "name": "native-mongo-util",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saggiyogesh/native-mongo-util.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saggiyogesh/native-mongo-util/issues"
+  },
+  "homepage": "https://github.com/saggiyogesh/native-mongo-util#readme",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "lil-logger": "github:saggiyogesh/lil-logger",
+    "memoizee": "^0.4.12",
+    "mongodb": "^2.2.35",
+    "then-sleep": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-lil": "^1.0.3",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-xo-space": "^0.18.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "nodemon": "^1.17.4",
+    "prettier": "^1.12.1"
+  }
+}
