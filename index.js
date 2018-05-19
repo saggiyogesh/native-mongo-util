@@ -1,9 +1,9 @@
 const Log = require('lil-logger').getLogger(__filename);
 const memoize = require('memoizee');
 const sleep = require('then-sleep');
-
+const Promise = require('bluebird');
 const { MongoClient } = require('mongodb');
-const mongodbURL = process.env.MONGO_URL || 'mongodb://localhost/lilprod-db';
+const mongodbURL = process.env.MONGO_URL || 'mongodb://localhost/test';
 
 let _client;
 let _db;
@@ -18,21 +18,22 @@ exports.getDB = async function() {
     isConnecting = true;
     await sleep(1000);
     _client = await MongoClient.connect(mongodbURL, {
-      promiseLibrary: require('bluebird'),
-      loggerLevel: 'error',
-      reconnectInterval: 2000
+      promiseLibrary: Promise,
+      loggerLevel: 'error'
     });
     _db = _client.db();
-    Log.debug({ msg: `DB connected: ${_db.databaseName}` });
+    Log.debug({ msg: `DB connected: ${exports.getDBName()}` });
     isConnecting = false;
   }
-  return Object.freeze(_db);
+  return _db;
 };
 
 exports.getClient = async function() {
   await exports.getDB();
-  return Object.freeze(_client);
+  return _client;
 };
+
+exports.getDBName = () => _db.databaseName;
 
 exports.getCollection = memoize(collectionName => _db.collection(collectionName));
 
