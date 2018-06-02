@@ -23,7 +23,7 @@
     "bluebird": "^3.5.1",
     "lil-logger": "github:saggiyogesh/lil-logger",
     "memoizee": "^0.4.12",
-    "mongodb": "^3.1.0-beta4",
+    "mongodb": "^3.0.9",
     "then-sleep": "^1.0.1"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-xo-space": "^0.18.0",
     "eslint-plugin-prettier": "^2.6.0",
-    "nodemon": "^1.17.4",
-    "prettier": "^1.12.1"
+    "nodemon": "^1.17.5",
+    "prettier": "^1.13.4"
   }
 }
