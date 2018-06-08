@@ -16,11 +16,13 @@ exports.getDB = async function() {
   }
   if (!_client) {
     isConnecting = true;
-    await sleep(1000);
-    _client = await MongoClient.connect(mongodbURL, {
-      promiseLibrary: Promise,
-      loggerLevel: 'error'
-    });
+    _client = await MongoClient.connect(
+      mongodbURL,
+      {
+        promiseLibrary: Promise,
+        loggerLevel: 'error'
+      }
+    );
     _db = _client.db();
     Log.debug({ msg: `DB connected: ${exports.getDBName()}` });
     isConnecting = false;
