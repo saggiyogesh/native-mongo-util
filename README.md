@@ -3,4 +3,4 @@ native mongo connection util
 
 
 
-https://travis-ci.org/saggiyogesh/native-mongo-util.svg?branch=master
+[![Build Status](https://travis-ci.org/saggiyogesh/native-mongo-util.svg?branch=master)](https://travis-ci.org/saggiyogesh/native-mongo-util)
