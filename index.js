@@ -71,7 +71,7 @@ class Connection {
         }
       );
       this._db = this._client.db();
-      Log.debug({ msg: `DB connected: ${exports.getDBName()}` });
+      Log.debug({ msg: `DB connected: ${this.getDBName()}` });
       this.isConnecting = false;
     }
 
