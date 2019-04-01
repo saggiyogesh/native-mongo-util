@@ -66,11 +66,21 @@ class Connection {
         this._mongoURL,
         {
           promiseLibrary: Promise,
-          loggerLevel: 'error',
+          loggerLevel: 'info',
           useNewUrlParser: true
         }
       );
+
       this._db = this._client.db();
+
+      this._db.on('close', () => {
+        Log.debug({ msg: `DB lost connection: ${this.getDBName()}` });
+      });
+
+      this._db.on('reconnect', () => {
+        Log.debug({ msg: `DB reconnected: ${this.getDBName()}` });
+      });
+
       Log.debug({ msg: `DB connected: ${this.getDBName()}` });
       this.isConnecting = false;
     }
