@@ -1,4 +1,4 @@
-const Log = require('lil-logger').getLogger(__filename);
+const Log = require('logger3000').getLogger(__filename);
 const memoize = require('memoizee');
 const sleep = require('then-sleep');
 const Promise = require('bluebird');
@@ -62,23 +62,22 @@ class Connection {
 
     if (!this._client) {
       this.isConnecting = true;
-      this._client = await MongoClient.connect(
-        this._mongoURL,
-        {
-          promiseLibrary: Promise,
-          loggerLevel: 'info',
-          useNewUrlParser: true
-        }
-      );
+      this._client = await MongoClient.connect(this._mongoURL, {
+        promiseLibrary: Promise,
+        loggerLevel: 'info',
+        useNewUrlParser: true
+      });
 
       this._db = this._client.db();
 
       this._db.on('close', () => {
-        Log.debug({ msg: `DB lost connection: ${this.getDBName()}` });
+        Log.debug({ msg: `DB lost connection: ${this.getDBName()}. Killing the process.` });
+        process.exit(1);
       });
 
       this._db.on('reconnect', () => {
-        Log.debug({ msg: `DB reconnected: ${this.getDBName()}` });
+        Log.debug({ msg: `DB reconnected: ${this.getDBName()}. Killing the process.` });
+        process.exit(1);
       });
 
       Log.debug({ msg: `DB connected: ${this.getDBName()}` });
