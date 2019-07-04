@@ -1,4 +1,5 @@
 process.env.MONGO_URL = 'mongodb://localhost/testDB';
+process.env.NODE_ENV = 'production';
 
 import test from 'ava';
 const { getDBName, connect, getCollection, newConnection } = require('./');
