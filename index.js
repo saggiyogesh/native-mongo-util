@@ -14,14 +14,16 @@ class Connection {
   /**
    * Creates an instance of Connection.
    * @param {String} mongoURL - MongoDB url string
+   * @param {Object} [options] - MongoDB connection options
    * @memberof Connection
    */
-  constructor(mongoURL) {
+  constructor(mongoURL, options) {
     assert(mongoURL);
     this._mongoURL = mongoURL;
     this._client = null;
     this._db = null;
     this._isConnecting = false;
+    this._options = options;
 
     /**
      * Returns mongo collection for the given `collectionName`
@@ -61,11 +63,16 @@ class Connection {
     }
 
     if (!this._client) {
-      this.isConnecting = true;
-      this._client = await MongoClient.connect(this._mongoURL, {
+      const fixOpts = {
         promiseLibrary: Promise,
         loggerLevel: 'info',
         useNewUrlParser: true
+      };
+
+      this.isConnecting = true;
+      this._client = await MongoClient.connect(this._mongoURL, {
+        ...this._options,
+        ...fixOpts
       });
 
       this._db = this._client.db();
@@ -127,22 +134,24 @@ class Connection {
 /**
  * Function will create & return new `Connection` instance.
  * @param {String} mongoURL - Valid mongodb connection string
+ * @param {Object} [options] - MongoDB connection options
  * @returns {Connection} - Connection instance
  */
-exports.newConnection = mongoURL => new Connection(mongoURL);
+exports.newConnection = (mongoURL, options) => new Connection(mongoURL, options);
 
 let _defaultConnection = null;
 
 /**
  * Connects to mongodb instance, using `MONGO_URL` env var.
+ * @param {Object} [options] - MongoDB connection options
  * @returns {Promise<DB>} - Mongodb DB instance.
  */
-exports.connect = () => {
+exports.connect = options => {
   if (_defaultConnection) {
     throw new Error(`Already connected to ${_defaultConnection.getDBName()}, Try \`newConnection()\` instead.`);
   }
 
-  _defaultConnection = new Connection(MONGO_URL);
+  _defaultConnection = new Connection(MONGO_URL, options);
 
   return _defaultConnection.connect();
 };
