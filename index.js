@@ -78,8 +78,12 @@ class Connection {
       this._db = this._client.db();
 
       this._db.on('close', () => {
-        Log.debug({ msg: `DB lost connection: ${this.getDBName()}. Killing the process.` });
-        process.exit(1);
+        if (this._closedCalled) {
+          Log.debug({ msg: 'DB connection closed.' });
+        } else {
+          Log.debug({ msg: `DB lost connection: ${this.getDBName()}. Killing the process.` });
+          process.exit(1);
+        }
       });
 
       this._db.on('reconnect', () => {
@@ -102,6 +106,7 @@ class Connection {
    * @memberof Connection
    */
   close(force) {
+    this._closedCalled = true;
     return this._client.close(force);
   }
 
