@@ -178,8 +178,12 @@ exports.connect = options => {
  * @param {Boolean} [force] - Force close, emitting no events
  * @returns {Promise} - Promise
  */
-exports.close = force => {
-  return _defaultConnection.close(force);
+exports.close = async force => {
+  const result = await _defaultConnection.close(force);
+
+  // eslint-disable-next-line require-atomic-updates
+  _defaultConnection = null;
+  return result;
 };
 
 exports.getDB = () => {
