@@ -95,6 +95,17 @@ class Connection {
   }
 
   /**
+   * Close the db and its underlying connections
+   * @public
+   * @param {Boolean} [force] - Force close, emitting no events
+   * @returns {Promise} - Promise
+   * @memberof Connection
+   */
+  close(force) {
+    return this._client.close(force);
+  }
+
+  /**
    * Returns Mongodb DB class instance of the connected db
    *
    * @public
@@ -154,6 +165,16 @@ exports.connect = options => {
   _defaultConnection = new Connection(MONGO_URL, options);
 
   return _defaultConnection.connect();
+};
+
+/**
+ * Close the db and its underlying connections
+ * @public
+ * @param {Boolean} [force] - Force close, emitting no events
+ * @returns {Promise} - Promise
+ */
+exports.close = force => {
+  return _defaultConnection.close(force);
 };
 
 exports.getDB = () => {
