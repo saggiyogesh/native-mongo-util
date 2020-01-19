@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'production';
 
 import test from 'ava';
 const { getDBName, connect, getCollection, newConnection, getClient } = require('./');
-const opts = { poolSize: 20 };
+const opts = { poolSize: 100 };
 test.serial('check connection with mongodb', async t => {
   await connect(opts);
   const dbName = getDBName();
