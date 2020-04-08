@@ -5,7 +5,7 @@ const Promise = require('bluebird');
 const { MongoClient, ObjectId } = require('mongodb');
 const assert = require('assert');
 const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost/test';
-
+const { get } = require('./tunnel');
 /**
  * Class to create native Mongo connection
  * @class Connection
@@ -62,6 +62,8 @@ class Connection {
 
     if (!this._client) {
       this.isConnecting = true;
+      const server = await get();
+      console.log('server', server);
       this._client = await MongoClient.connect(
         this._mongoURL,
         {

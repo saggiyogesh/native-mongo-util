@@ -24,7 +24,8 @@
     "lil-logger": "github:saggiyogesh/lil-logger",
     "memoizee": "^0.4.14",
     "mongodb": "^3.1.8",
-    "then-sleep": "^1.0.1"
+    "then-sleep": "^1.0.1",
+    "tunnel-ssh": "^4.1.4"
   },
   "devDependencies": {
     "ava": "^1.2.1",
