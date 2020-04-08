@@ -32,7 +32,7 @@ class Connection {
      * @param {String} collectionName - Name of collection
      * @returns {Collection} - Mongo Collection instance
      */
-    this.getCollection = memoize(collectionName => {
+    this.getCollection = memoize((collectionName) => {
       this.checkAndThrowDBNotConnectedError();
       return this._db.collection(collectionName);
     });
@@ -66,20 +66,14 @@ class Connection {
       const fixOpts = {
         promiseLibrary: Promise,
         loggerLevel: 'info',
-        useNewUrlParser: true
+        useNewUrlParser: true,
       };
 
       this.isConnecting = true;
       const server = await get();
       console.log('server', server);
 
-      this._client = await MongoClient.connect(
-        this._mongoURL,
-        {
-          ...this._options,
-          ...fixOpts
-        }
-      );
+      this._client = await MongoClient.connect(this._mongoURL, { ...this._options, ...fixOpts });
 
       this._db = this._client.db();
 
@@ -168,7 +162,7 @@ let _defaultConnection = null;
  * @param {Object} [options] - MongoDB connection options
  * @returns {Promise<DB>} - Mongodb DB instance.
  */
-exports.connect = options => {
+exports.connect = (options) => {
   if (_defaultConnection) {
     throw new Error(`Already connected to ${_defaultConnection.getDBName()}, Try \`newConnection()\` instead.`);
   }
@@ -184,7 +178,7 @@ exports.connect = options => {
  * @param {Boolean} [force] - Force close, emitting no events
  * @returns {Promise} - Promise
  */
-exports.close = async force => {
+exports.close = async (force) => {
   const result = await _defaultConnection.close(force);
 
   // eslint-disable-next-line require-atomic-updates
@@ -215,7 +209,7 @@ exports.getDBName = () => _defaultConnection.getDBName();
  * @param {String} collectionName - Name of collection
  * @returns {Collection} - Mongo Collection instance
  */
-exports.getCollection = collectionName => _defaultConnection.getCollection(collectionName);
+exports.getCollection = (collectionName) => _defaultConnection.getCollection(collectionName);
 
 /**
  * Exporting mongodb `ObjectId` class.
