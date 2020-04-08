@@ -1,6 +1,8 @@
-const Log = require('lil-logger').getLogger(__filename);
+const Log = require('logger3000').getLogger(__filename);
 const tunnel = require('tunnel-ssh');
 const Promise = require('bluebird');
+
+const { SSH_USER, SSH_PASSWORD, SSH_HOST, SSH_KEY_PATH, MONGO_URL } = process.env;
 
 function getPort(mongoURL) {
   const arr = mongoURL.split(':');
@@ -15,8 +17,7 @@ function getPort(mongoURL) {
   return p;
 }
 
-exports.get = function () {
-  const { SSH_USER, SSH_PASSWORD, SSH_HOST, SSH_KEY_PATH, MONGO_URL } = process.env;
+exports.get = function() {
   if (SSH_HOST && SSH_USER) {
     const port = getPort(MONGO_URL);
     const config = {
@@ -30,7 +31,7 @@ exports.get = function () {
       keepAlive: true
     };
 
-    const server = tunnel(config, function (error, server) {
+    const server = tunnel(config, function(error, server) {
       if (error) {
         Log.error({ error, msg: 'Not connected to tunnel. Pls verify the tunnel configurations' });
         process.exit(1);
@@ -40,7 +41,7 @@ exports.get = function () {
       Promise.resolve(server);
     });
 
-    server.on('error', function (error) {
+    server.on('error', function(error) {
       Log.error({ error, msg: 'Err in tunnel' });
     });
   }

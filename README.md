@@ -1,6 +1,6 @@
 # native-mongo-util
 
-Utility package to connect multiple mongo databases.
+Utility package to connect multiple mongo databases. Supports SSH tunneling.
 
 ## Usage
 
@@ -17,7 +17,7 @@ Utility package to connect multiple mongo databases.
 
   (async () => {
     try {
-      await connect(); // connect to db
+      await connect({ poolSize: 20 }); // connect to db with options to MongoClient
 
       const userCollection = getCollection('user');
       const allUsers = userCollection.find().toArray();
@@ -37,7 +37,7 @@ Utility package to connect multiple mongo databases.
   (async () => {
     try {
       const mongoURL = 'mongodb://localhost/someOtherDB';
-      const connection = newConnection(mongoURL);
+      const connection = newConnection(mongoURL, { poolSize: 20 }); // Provide mongo uri & MongoClient options
       await connection.connect(); // connect to someOtherDB
 
       const studentsCollection = connection.getCollection('students'); // get students collection from someOtherDB connection.
@@ -53,17 +53,25 @@ Utility package to connect multiple mongo databases.
 
 ## API
 
-- `exports.newConnection(mongoURL)` Function will create & return new `Connection` class instance. `mongoURL` is valid mongodb connection string.
-- `async exports.connect()` Async function that connects to mongodb, using `MONGO_URL` env var. Returns Mongodb `DB` class instance
+- `exports.newConnection(mongoURL, options)` Function will create & return new `Connection` class instance. `mongoURL` is valid mongodb connection string. `options` is MongoClient options
+- `async exports.connect(options)` Async function that connects to mongodb, using `MONGO_URL` env var. MongoClient `options` can also be passed. Returns Mongodb `DB` class instance
 - `exports.getCollection(collectionName)` Returns Mongodb collection (`Collection` instance) for `collectionName`.
 - `async exports.getClient()` Returns Mongodb `MongoClient` class instance
 - `exports.getDBName()` Returns connected mongodb name
 
 - Class **Connection** methods
-  - `constructor(mongoURL)` Valid mongodb connection string
+  - `constructor(mongoURL, options)` Valid mongodb connection string and MongoClient options
   - `async connect()` Async method connects to mongodb, using `mongoURL` for the same instance. Returns Mongodb `DB` class instance
   - `getCollection(collectionName)` Returns mongodb collection.
   - `getDBName()` Returns db name
   - `async getClient()` Returns Mongodb `MongoClient` instance.
+
+## Environment Variables
+- `MONGO_URL` Mongo connection url
+- `SSH_HOST` ssh hostname or ip
+- `SSH_USER` ssh user for remote connection
+- `SSH_PASSWORD` ssh connection password
+- `SSH_KEY_PATH` ssh private key path like `~/.ssh/id_rsa`. Either of `SSH_PASSWORD` or `SSH_KEY_PATH` must be provided depending on remote server auth mode. 
+
 
 [![Build Status](https://travis-ci.org/saggiyogesh/native-mongo-util.svg?branch=master)](https://travis-ci.org/saggiyogesh/native-mongo-util)

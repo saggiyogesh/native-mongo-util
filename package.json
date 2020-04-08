@@ -1,6 +1,6 @@
 {
   "name": "native-mongo-util",
-  "version": "2.0.1",
+  "version": "2.3.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,22 +20,23 @@
   },
   "homepage": "https://github.com/saggiyogesh/native-mongo-util#readme",
   "dependencies": {
-    "bluebird": "^3.5.2",
-    "lil-logger": "github:saggiyogesh/lil-logger",
+    "bluebird": "^3.5.5",
+    "tunnel-ssh": "^4.1.4",
+    "logger3000": "0.1.1",
     "memoizee": "^0.4.14",
-    "mongodb": "^3.1.8",
-    "then-sleep": "^1.0.1",
-    "tunnel-ssh": "^4.1.4"
+    "mongodb": "^3.2.7",
+    "then-sleep": "^1.0.1"
   },
   "devDependencies": {
-    "ava": "^1.2.1",
-    "eslint": "^5.7.0",
-    "eslint-config-lil": "^1.0.4",
-    "eslint-config-prettier": "^4.1.0",
+    "ava": "^2.1.0",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1",
+    "eslint-config-lil": "^1.0.6",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-config-xo-space": "^0.21.0",
-    "eslint-plugin-prettier": "^3.0.0",
-    "nodemon": "^1.18.4",
-    "prettier": "^1.14.3",
-    "event-stream": ">=4.0.0"
+    "eslint-plugin-prettier": "^3.1.0",
+    "event-stream": ">=4.0.1",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2"
   }
 }
