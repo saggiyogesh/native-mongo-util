@@ -51,11 +51,12 @@ class Connection {
 
   /**
    * Connects to mongodb for the provided `mongoURL` for this connection instance
+   * @param {Object} [options] - MongoDB connection options
    * @public
    * @returns {Promise<DB>} - Mongodb DB instance.
    * @memberof Connection
    */
-  async connect() {
+  async connect(options = {}) {
     if (this.isConnecting) {
       Log.debug({ msg: 'connecting to DB' });
 
@@ -72,7 +73,7 @@ class Connection {
       this.isConnecting = true;
       await get();
 
-      this._client = await MongoClient.connect(this._mongoURL, { ...this._options, ...fixOpts });
+      this._client = await MongoClient.connect(this._mongoURL, { ...this._options, ...fixOpts, ...options });
 
       this._db = this._client.db();
 
