@@ -70,8 +70,7 @@ class Connection {
       };
 
       this.isConnecting = true;
-      const server = await get();
-      console.log('server', server);
+      await get();
 
       this._client = await MongoClient.connect(this._mongoURL, { ...this._options, ...fixOpts });
 
