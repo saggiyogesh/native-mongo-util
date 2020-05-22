@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "ava test.js",
-    "lint": "eslint index.js",
-    "format": "prettier --write 'index.js'"
+    "lint": "eslint index.js tunnel.js",
+    "format": "prettier --write '{index.js,tunnel.js}'"
   },
   "repository": {
     "type": "git",
@@ -20,22 +20,23 @@
   },
   "homepage": "https://github.com/saggiyogesh/native-mongo-util#readme",
   "dependencies": {
-    "bluebird": "^3.5.5",
+    "bluebird": "^3.7.2",
+    "tunnel-ssh": "^4.1.4",
     "logger3000": "0.1.1",
     "memoizee": "^0.4.14",
-    "mongodb": "^3.2.7",
+    "mongodb": "^3.5.7",
     "then-sleep": "^1.0.1"
   },
   "devDependencies": {
-    "ava": "^2.1.0",
-    "babel-eslint": "^10.0.2",
-    "eslint": "^6.0.1",
+    "ava": "^3.6.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
     "eslint-config-lil": "^1.0.6",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-config-xo-space": "^0.21.0",
-    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-config-xo-space": "^0.24.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "event-stream": ">=4.0.1",
-    "nodemon": "^1.19.1",
-    "prettier": "^1.18.2"
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.4"
   }
 }

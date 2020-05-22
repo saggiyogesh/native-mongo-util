@@ -1,10 +1,11 @@
 process.env.MONGO_URL = 'mongodb://localhost/testDB';
 process.env.NODE_ENV = 'production';
 
-import test from 'ava';
+const test = require('ava');
+
 const { getDBName, connect, getCollection, newConnection, getClient } = require('./');
 const opts = { poolSize: 20 };
-test.serial('check connection with mongodb', async t => {
+test.serial('check connection with mongodb', async (t) => {
   await connect(opts);
   const dbName = getDBName();
   t.is(dbName, 'testDB');
@@ -14,14 +15,14 @@ test.serial('check connection with mongodb', async t => {
   t.is(opts.poolSize, client.s.options.poolSize);
 });
 
-test.serial('fetch all records from a collection', async t => {
+test.serial('fetch all records from a collection', async (t) => {
   const d = Date.now();
   await getCollection('testCol').insert({ d });
   const a = await getCollection('testCol').findOne({ d });
   t.truthy(a, 'Doc not saved');
 });
 
-test.serial('another mongo connection', async t => {
+test.serial('another mongo connection', async (t) => {
   const mongoURL = 'mongodb://localhost/someDB';
   const connection = newConnection(mongoURL, opts);
   await connection.connect();
@@ -35,12 +36,12 @@ test.serial('another mongo connection', async t => {
   t.truthy(a, 'Doc not saved');
 });
 
-test.serial('validate options passed to mongo client for default connection', async t => {
+test.serial('validate options passed to mongo client for default connection', async (t) => {
   const client = await getClient();
   t.is(opts.poolSize, client.s.options.poolSize);
 });
 
-test.serial('validate options passed to mongo client for other connection', async t => {
+test.serial('validate options passed to mongo client for other connection', async (t) => {
   const client = await getClient();
   t.is(opts.poolSize, client.s.options.poolSize);
 });

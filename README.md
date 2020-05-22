@@ -1,6 +1,6 @@
 # native-mongo-util
 
-Utility package to connect multiple mongo databases.
+Utility package to connect multiple mongo databases. Supports SSH tunneling.
 
 ## Usage
 
@@ -65,5 +65,13 @@ Utility package to connect multiple mongo databases.
   - `getCollection(collectionName)` Returns mongodb collection.
   - `getDBName()` Returns db name
   - `async getClient()` Returns Mongodb `MongoClient` instance.
+
+## Environment Variables
+- `MONGO_URL` Mongo connection url
+- `SSH_HOST` ssh hostname or ip
+- `SSH_USER` ssh user for remote connection
+- `SSH_PASSWORD` ssh connection password
+- `SSH_KEY_PATH` ssh private key path like `~/.ssh/id_rsa`. Either of `SSH_PASSWORD` or `SSH_KEY_PATH` must be provided depending on remote server auth mode. 
+
 
 [![Build Status](https://travis-ci.org/saggiyogesh/native-mongo-util.svg?branch=master)](https://travis-ci.org/saggiyogesh/native-mongo-util)
