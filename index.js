@@ -103,7 +103,7 @@ class Connection {
         });
 
         this._db.on('timeout', () => {
-          Log.info({ msg: `DB error: ${this.getDBName()}. Killing the process.` });
+          Log.info({ msg: `DB timeout: ${this.getDBName()}. Killing the process.` });
           process.exit(1);
         });
       }
