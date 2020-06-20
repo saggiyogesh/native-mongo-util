@@ -4,7 +4,7 @@ const sleep = require('then-sleep');
 const Promise = require('bluebird');
 const { MongoClient, ObjectId } = require('mongodb');
 const assert = require('assert');
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost/test';
+const { MONGO_URL = 'mongodb://localhost/test', PROCESS_EXIT_ON_MONGO_ERROR = 'true' } = process.env;
 const { get } = require('./tunnel');
 /**
  * Class to create native Mongo connection
@@ -90,6 +90,23 @@ class Connection {
         Log.debug({ msg: `DB reconnected: ${this.getDBName()}. Killing the process.` });
         process.exit(1);
       });
+
+      if (PROCESS_EXIT_ON_MONGO_ERROR === 'true') {
+        this._db.on('parseError', () => {
+          Log.info({ msg: `DB parseError: ${this.getDBName()}. Killing the process.` });
+          process.exit(1);
+        });
+
+        this._db.on('error', () => {
+          Log.info({ msg: `DB error: ${this.getDBName()}. Killing the process.` });
+          process.exit(1);
+        });
+
+        this._db.on('timeout', () => {
+          Log.info({ msg: `DB error: ${this.getDBName()}. Killing the process.` });
+          process.exit(1);
+        });
+      }
 
       Log.debug({ msg: `DB connected: ${this.getDBName()}` });
       this.isConnecting = false;

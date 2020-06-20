@@ -67,11 +67,12 @@ Utility package to connect multiple mongo databases. Supports SSH tunneling.
   - `async getClient()` Returns Mongodb `MongoClient` instance.
 
 ## Environment Variables
+
 - `MONGO_URL` Mongo connection url
+- `PROCESS_EXIT_ON_MONGO_ERROR` Prevent node process exit on any Mongo error. Default value is `true`.
 - `SSH_HOST` ssh hostname or ip
 - `SSH_USER` ssh user for remote connection
 - `SSH_PASSWORD` ssh connection password
-- `SSH_KEY_PATH` ssh private key path like `~/.ssh/id_rsa`. Either of `SSH_PASSWORD` or `SSH_KEY_PATH` must be provided depending on remote server auth mode. 
-
+- `SSH_KEY_PATH` ssh private key path like `~/.ssh/id_rsa`. Either of `SSH_PASSWORD` or `SSH_KEY_PATH` must be provided depending on remote server auth mode.
 
 [![Build Status](https://travis-ci.org/saggiyogesh/native-mongo-util.svg?branch=master)](https://travis-ci.org/saggiyogesh/native-mongo-util)
