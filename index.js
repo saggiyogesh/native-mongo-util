@@ -73,7 +73,15 @@ class Connection {
       this.isConnecting = true;
       await get();
 
-      this._client = await MongoClient.connect(this._mongoURL, { ...this._options, ...fixOpts, ...options });
+      try {
+        this._client = await MongoClient.connect(this._mongoURL, { ...this._options, ...fixOpts, ...options });
+      } catch (err) {
+        Log.error({
+          error: err,
+          msg: `Error occurred while connecting to DB: ${this.getDBName()}. Killing the process.`,
+        });
+        process.exit(1);
+      }
 
       this._db = this._client.db();
 
