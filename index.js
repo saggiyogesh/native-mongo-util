@@ -4,7 +4,7 @@ const sleep = require('then-sleep');
 const Promise = require('bluebird');
 const { MongoClient, ObjectId, ReadPreference } = require('mongodb');
 const assert = require('assert');
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost/test';
+const { MONGO_URL = 'mongodb://localhost/test', PROCESS_EXIT_ON_MONGO_ERROR = 'true' } = process.env;
 const { get } = require('./tunnel');
 /**
  * Class to create native Mongo connection
@@ -58,7 +58,7 @@ class Connection {
    */
   async connect(options = {}) {
     if (this.isConnecting) {
-      Log.debug({ msg: 'connecting to DB' });
+      Log.debug({ msg: 'Already connecting to DB' });
       await sleep(2000);
     }
 
@@ -73,7 +73,17 @@ class Connection {
       this.isConnecting = true;
       await get();
 
-      this._client = await MongoClient.connect(this._mongoURL, { ...this._options, ...fixOpts, ...options });
+      try {
+        Log.debug({ msg: 'connecting to DB' });
+
+        this._client = await MongoClient.connect(this._mongoURL, { ...this._options, ...fixOpts, ...options });
+      } catch (err) {
+        Log.error({
+          error: err,
+          msg: `Error occurred while connecting to DB. Killing the process.`,
+        });
+        process.exit(1);
+      }
 
       this._db = this._client.db();
 
@@ -81,15 +91,32 @@ class Connection {
         if (this._closedCalled) {
           Log.debug({ msg: 'DB connection closed.' });
         } else {
-          Log.debug({ msg: `DB lost connection: ${this.getDBName()}. Killing the process.` });
+          Log.debug({ msg: `DB lost connection. Killing the process.` });
           process.exit(1);
         }
       });
 
       this._db.on('reconnect', () => {
-        Log.debug({ msg: `DB reconnected: ${this.getDBName()}. Killing the process.` });
+        Log.debug({ msg: `DB reconnected. Killing the process.` });
         process.exit(1);
       });
+
+      if (PROCESS_EXIT_ON_MONGO_ERROR === 'true') {
+        this._db.on('parseError', () => {
+          Log.info({ msg: `DB parseError. Killing the process.` });
+          process.exit(1);
+        });
+
+        this._db.on('error', () => {
+          Log.info({ msg: `DB error. Killing the process.` });
+          process.exit(1);
+        });
+
+        this._db.on('timeout', () => {
+          Log.info({ msg: `DB timeout. Killing the process.` });
+          process.exit(1);
+        });
+      }
 
       Log.debug({ msg: `DB connected: ${this.getDBName()}` });
       this.isConnecting = false;
