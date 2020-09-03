@@ -2,7 +2,7 @@ const Log = require('logger3000').getLogger(__filename);
 const memoize = require('memoizee');
 const sleep = require('then-sleep');
 const Promise = require('bluebird');
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient, ObjectId, ReadPreference } = require('mongodb');
 const assert = require('assert');
 const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost/test';
 const { get } = require('./tunnel');
@@ -59,7 +59,6 @@ class Connection {
   async connect(options = {}) {
     if (this.isConnecting) {
       Log.debug({ msg: 'connecting to DB' });
-
       await sleep(2000);
     }
 
@@ -68,6 +67,7 @@ class Connection {
         promiseLibrary: Promise,
         loggerLevel: 'info',
         useNewUrlParser: true,
+        readPreference: ReadPreference.SECONDARY_PREFERRED,
       };
 
       this.isConnecting = true;

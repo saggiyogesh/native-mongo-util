@@ -22,21 +22,21 @@
   "dependencies": {
     "bluebird": "^3.7.2",
     "tunnel-ssh": "^4.1.4",
-    "logger3000": "0.1.1",
+    "logger3000": "0.2.0",
     "memoizee": "^0.4.14",
-    "mongodb": "^3.5.7",
+    "mongodb": "^3.6.1",
     "then-sleep": "^1.0.1"
   },
   "devDependencies": {
-    "ava": "^3.6.0",
+    "ava": "^3.12.1",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.8.1",
     "eslint-config-lil": "^1.0.6",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-config-xo-space": "^0.24.0",
-    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-xo-space": "^0.25.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "event-stream": ">=4.0.1",
-    "nodemon": "^2.0.2",
-    "prettier": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "prettier": "^2.1.1"
   }
 }
