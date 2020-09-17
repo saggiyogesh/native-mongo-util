@@ -68,6 +68,7 @@ class Connection {
         loggerLevel: 'info',
         useNewUrlParser: true,
         readPreference: ReadPreference.SECONDARY_PREFERRED,
+        useUnifiedTopology: true,
       };
 
       this.isConnecting = true;
