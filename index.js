@@ -68,7 +68,7 @@ class Connection {
         loggerLevel: 'info',
         useNewUrlParser: true,
         readPreference: ReadPreference.SECONDARY_PREFERRED,
-        useUnifiedTopology: true,
+        useUnifiedTopology: MONGO_URL.indexOf(',') > -1, // only when multiple hosts are there in Mongo Url.
       };
 
       this.isConnecting = true;
