@@ -24,7 +24,7 @@
     "tunnel-ssh": "^4.1.4",
     "logger3000": "0.2.0",
     "memoizee": "^0.4.14",
-    "mongodb": "^3.6.1",
+    "mongodb": "^4.0.0",
     "then-sleep": "^1.0.1"
   },
   "devDependencies": {
