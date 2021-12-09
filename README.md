@@ -20,7 +20,7 @@ Utility package to connect multiple mongo databases. Supports SSH tunneling.
       await connect({ poolSize: 20 }); // connect to db with options to MongoClient
 
       const userCollection = getCollection('user');
-      const allUsers = userCollection.find().toArray();
+      const allUsers = await userCollection.find().toArray();
       console.log(allUsers);
     } catch (err) {
       console.log('Error ocurred while connecting DB', err);
@@ -42,7 +42,7 @@ Utility package to connect multiple mongo databases. Supports SSH tunneling.
 
       const studentsCollection = connection.getCollection('students'); // get students collection from someOtherDB connection.
 
-      const allUsers = studentsCollection.find().toArray();
+      const allUsers = await studentsCollection.find().toArray();
       console.log(allUsers);
     } catch (err) {
       console.log('Error ocurred while connecting DB', err);
