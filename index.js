@@ -97,24 +97,24 @@ class Connection {
         }
       });
 
-      this._db.on('reconnect', () => {
-        Log.debug({ msg: `DB reconnected. Killing the process.` });
+      this._db.on('reconnect', function () {
+        Log.debug({ msg: `DB reconnected. Killing the process. Reason reconnect`, arg1: arguments });
         process.exit(1);
       });
 
       if (PROCESS_EXIT_ON_MONGO_ERROR === 'true') {
-        this._db.on('parseError', () => {
-          Log.info({ msg: `DB parseError. Killing the process.` });
+        this._db.on('parseError', function () {
+          Log.debug({ msg: `DB reconnected. Killing the process. Reason parseError`, arg1: arguments });
           process.exit(1);
         });
 
-        this._db.on('error', () => {
-          Log.info({ msg: `DB error. Killing the process.` });
+        this._db.on('error', function () {
+          Log.debug({ msg: `DB reconnected. Killing the process. Reason error`, arg1: arguments });
           process.exit(1);
         });
 
-        this._db.on('timeout', () => {
-          Log.info({ msg: `DB timeout. Killing the process.` });
+        this._db.on('timeout', function () {
+          Log.debug({ msg: `DB reconnected. Killing the process. Reason timeout`, arg1: arguments });
           process.exit(1);
         });
       }
