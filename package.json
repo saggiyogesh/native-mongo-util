@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/saggiyogesh/native-mongo-util#readme",
   "dependencies": {
-    "bluebird": "^3.7.2",
     "tunnel-ssh": "^4.1.6",
     "logger3000": "0.2.0",
     "memoizee": "^0.4.15",

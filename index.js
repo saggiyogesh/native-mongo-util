@@ -1,7 +1,6 @@
 const Log = require('logger3000').getLogger(__filename);
 const memoize = require('memoizee');
 const sleep = require('then-sleep');
-const Promise = require('bluebird');
 const { MongoClient, ObjectId, ReadPreference } = require('mongodb');
 const assert = require('assert');
 const { MONGO_URL = 'mongodb://localhost/test', PROCESS_EXIT_ON_MONGO_ERROR = 'true' } = process.env;
@@ -64,11 +63,11 @@ class Connection {
 
     if (!this._client) {
       const fixOpts = {
-        promiseLibrary: Promise,
         loggerLevel: 'info',
         useNewUrlParser: true,
         readPreference: ReadPreference.SECONDARY_PREFERRED,
-        useUnifiedTopology: MONGO_URL.indexOf(',') > -1, // only when multiple hosts are there in Mongo Url.
+        useUnifiedTopology: true, //MONGO_URL.indexOf(',') > -1, // only when multiple hosts are there in Mongo Url.
+        retryReads: true,
       };
 
       this.isConnecting = true;
@@ -88,35 +87,33 @@ class Connection {
 
       this._db = this._client.db();
 
-      this._db.on('close', () => {
-        if (this._closedCalled) {
-          Log.debug({ msg: 'DB connection closed.' });
-        } else {
-          Log.debug({ msg: `DB lost connection. Killing the process.` });
-          process.exit(1);
-        }
-      });
+      // this._db.on('close', () => {
+      //   if (this._closedCalled) {
+      //     Log.debug({ msg: 'DB connection closed.' });
+      //   } else {
+      //     Log.debug({ msg: `DB lost connection. Killing the process.` });
+      //     process.exit(1);
+      //   }
+      // });
 
-      this._db.on('reconnect', function () {
-        Log.debug({ msg: `DB reconnected. Killing the process. Reason reconnect`, arg1: arguments });
-        process.exit(1);
-      });
+      // this._db.on('reconnect', function () {
+      //   Log.debug({ msg: `DB reconnected. Killing the process. Reason reconnect`, arg1: arguments });
+      //   process.exit(1);
+      // });
 
       if (PROCESS_EXIT_ON_MONGO_ERROR === 'true') {
-        this._db.on('parseError', function () {
-          Log.debug({ msg: `DB reconnected. Killing the process. Reason parseError`, arg1: arguments });
-          process.exit(1);
-        });
-
-        this._db.on('error', function () {
-          Log.debug({ msg: `DB reconnected. Killing the process. Reason error`, arg1: arguments });
-          process.exit(1);
-        });
-
-        this._db.on('timeout', function () {
-          Log.debug({ msg: `DB reconnected. Killing the process. Reason timeout`, arg1: arguments });
-          process.exit(1);
-        });
+        // this._db.on('parseError', function () {
+        //   Log.debug({ msg: `DB reconnected. Killing the process. Reason parseError`, arg1: arguments });
+        //   process.exit(1);
+        // });
+        // this._db.on('error', function () {
+        //   Log.debug({ msg: `DB reconnected. Killing the process. Reason error`, arg1: arguments });
+        //   process.exit(1);
+        // });
+        // this._db.on('timeout', function () {
+        //   Log.debug({ msg: `DB reconnected. Killing the process. Reason timeout`, arg1: arguments });
+        //   process.exit(1);
+        // });
       }
 
       Log.debug({ msg: `DB connected: ${this.getDBName()}` });
