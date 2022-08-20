@@ -1,6 +1,5 @@
 const Log = require('logger3000').getLogger(__filename);
 const tunnel = require('tunnel-ssh');
-const Promise = require('bluebird');
 
 const {
   SSH_USER,
