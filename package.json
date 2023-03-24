@@ -21,7 +21,7 @@
   "homepage": "https://github.com/saggiyogesh/native-mongo-util#readme",
   "dependencies": {
     "tunnel-ssh": "^4.1.6",
-    "logger3000": "0.2.0",
+    "logger3000": "1.0.0",
     "memoizee": "^0.4.15",
     "mongodb": "^4.2.1",
     "then-sleep": "^1.0.1"
