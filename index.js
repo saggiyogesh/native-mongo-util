@@ -3,7 +3,8 @@ const memoize = require('memoizee');
 const sleep = require('then-sleep');
 const { MongoClient, ObjectId, ReadPreference } = require('mongodb');
 const assert = require('assert');
-const { MONGO_URL = 'mongodb://localhost/test', PROCESS_EXIT_ON_MONGO_ERROR = 'true' } = process.env;
+const { URL } = require('url');
+const { MONGO_URL = 'mongodb://localhost/test' } = process.env;
 const { get } = require('./tunnel');
 /**
  * Class to create native Mongo connection
@@ -23,6 +24,7 @@ class Connection {
     this._db = null;
     this._isConnecting = false;
     this._options = options;
+    this._dbName = '';
 
     /**
      * Returns mongo collection for the given `collectionName`
@@ -51,11 +53,13 @@ class Connection {
   /**
    * Connects to mongodb for the provided `mongoURL` for this connection instance
    * @param {Object} [options] - MongoDB connection options
+   * @param {String} [dbName] - Database name
    * @public
    * @returns {Promise<DB>} - Mongodb DB instance.
    * @memberof Connection
    */
-  async connect(options = {}) {
+  async connect(options = {}, dbName) {
+    this._dbName = dbName || new URL(this._mongoURL).pathname.replace('/', '');
     if (this.isConnecting) {
       Log.debug({ msg: 'Already connecting to DB' });
       await sleep(2000);
@@ -63,11 +67,10 @@ class Connection {
 
     if (!this._client) {
       const fixOpts = {
-        loggerLevel: 'info',
-        useNewUrlParser: true,
         readPreference: ReadPreference.SECONDARY_PREFERRED,
-        useUnifiedTopology: true, //MONGO_URL.indexOf(',') > -1, // only when multiple hosts are there in Mongo Url.
         retryReads: true,
+        retryWrites: true,
+        w: 'majority',
       };
 
       this.isConnecting = true;
@@ -85,36 +88,7 @@ class Connection {
         process.exit(1);
       }
 
-      this._db = this._client.db();
-
-      // this._db.on('close', () => {
-      //   if (this._closedCalled) {
-      //     Log.debug({ msg: 'DB connection closed.' });
-      //   } else {
-      //     Log.debug({ msg: `DB lost connection. Killing the process.` });
-      //     process.exit(1);
-      //   }
-      // });
-
-      // this._db.on('reconnect', function () {
-      //   Log.debug({ msg: `DB reconnected. Killing the process. Reason reconnect`, arg1: arguments });
-      //   process.exit(1);
-      // });
-
-      if (PROCESS_EXIT_ON_MONGO_ERROR === 'true') {
-        // this._db.on('parseError', function () {
-        //   Log.debug({ msg: `DB reconnected. Killing the process. Reason parseError`, arg1: arguments });
-        //   process.exit(1);
-        // });
-        // this._db.on('error', function () {
-        //   Log.debug({ msg: `DB reconnected. Killing the process. Reason error`, arg1: arguments });
-        //   process.exit(1);
-        // });
-        // this._db.on('timeout', function () {
-        //   Log.debug({ msg: `DB reconnected. Killing the process. Reason timeout`, arg1: arguments });
-        //   process.exit(1);
-        // });
-      }
+      this._db = this._client.db(this._dbName, { loggerLevel: 'info' });
 
       Log.debug({ msg: `DB connected: ${this.getDBName()}` });
       this.isConnecting = false;
@@ -156,7 +130,7 @@ class Connection {
    */
   getDBName() {
     this.checkAndThrowDBNotConnectedError();
-    return this._db.databaseName;
+    return this._dbName;
   }
 
   /**
@@ -209,11 +183,6 @@ exports.close = async (force) => {
   // eslint-disable-next-line require-atomic-updates
   _defaultConnection = null;
   return result;
-};
-
-exports.getDB = () => {
-  console.log('native-mongo-util: exports.getDB() is deprecated. Use exports.connect()');
-  return exports.connect();
 };
 
 /**
