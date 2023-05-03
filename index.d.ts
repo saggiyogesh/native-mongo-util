@@ -1,5 +1,5 @@
 export function newConnection(mongoURL: string, options?: MongoClientOptions): Connection;
-export function connect(options?: MongoClientOptions, dbName: string): Promise<Db>;
+export function connect(options?: MongoClientOptions, dbName?: string): Promise<MongoClient>;
 export function close(force?: boolean): Promise<void>;
 export function getClient(): Promise<MongoClient>;
 export function getDBName(): string;
@@ -45,7 +45,7 @@ declare class Connection {
      * @returns {Promise<DB>} - Mongodb DB instance.
      * @memberof Connection
      */
-    public connect(options?: any, dbName?: string): Promise<DB>;
+    public connect(options?: any, dbName?: string): Promise<Db>;
     isConnecting: boolean;
     /**
      * Close the db and its underlying connections
@@ -63,7 +63,7 @@ declare class Connection {
      * @returns {DB} - Mongodb DB instance.
      * @memberof Connection
      */
-    public getDB(): DB;
+    public getDB(): Db;
     /**
      * Returns connected db name
      *
@@ -81,5 +81,5 @@ declare class Connection {
      */
     public getClient(): Promise<MongoClient>;
 }
-import { Db, MongoClient, MongoClientOptions } from "mongodb";
+import { Collection, Db, MongoClient, MongoClientOptions } from "mongodb";
 import { ObjectId } from "mongodb";
