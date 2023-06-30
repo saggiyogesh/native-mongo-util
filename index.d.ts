@@ -3,7 +3,7 @@ export function connect(options?: MongoClientOptions, dbName?: string): Promise<
 export function close(force?: boolean): Promise<void>;
 export function getClient(): Promise<MongoClient>;
 export function getDBName(): string;
-export function getCollection(collectionName: string): Collection;
+export function getCollection<T>(collectionName: string): Collection<T>;
 export { ObjectId };
 /**
  * Class to create native Mongo connection
@@ -30,7 +30,7 @@ declare class Connection {
      * @param {String} collectionName - Name of collection
      * @returns {Collection} - Mongo Collection instance
      */
-    public getCollection: any;
+    public getCollection<T>(): Collection<T>;
     /**
      * Throw db not connected error
      * @memberof Connection
